@@ -142,9 +142,7 @@ function Login({ configured, onDone }: { configured: boolean; onDone: () => void
         onSubmit={submit}
         className="w-full max-w-sm rounded-3xl border border-border bg-card p-8 shadow-soft"
       >
-        <p className="font-serif text-2xl font-semibold">
-          Italian Bites <span className="italic text-primary">Admin</span>
-        </p>
+        <p className="sign text-2xl">Italian Bites Admin</p>
         <p className="mt-1 text-sm text-muted-foreground">Sign in to see and manage orders.</p>
         {!configured && (
           <p className="mt-5 flex gap-2 rounded-xl bg-price/10 p-3 text-sm">
@@ -276,9 +274,7 @@ function Dashboard({ storage, onLogout }: { storage: "mysql" | "file"; onLogout:
     <div className="min-h-screen bg-secondary/40">
       <header className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 md:px-6">
-          <p className="font-serif text-xl font-semibold">
-            Italian Bites <span className="italic text-primary">Orders</span>
-          </p>
+          <p className="sign text-xl">Italian Bites Orders</p>
           <div className="flex items-center gap-2">
             <Button
               variant="soft"

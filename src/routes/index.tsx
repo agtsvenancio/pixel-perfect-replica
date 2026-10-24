@@ -1,15 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CartDrawer } from "@/components/site/CartDrawer";
 import { Header, MobileBar } from "@/components/site/Header";
-import {
-  Hero,
-  HowItWorks,
-  Occasions,
-  PainSolution,
-  Promise,
-  TrustBar,
-} from "@/components/site/Intro";
-import { GuestCalculator, MenuSection, SignatureDishes } from "@/components/site/Menu";
+import { Hero, HowItWorks, KitchenStrip, Occasions } from "@/components/site/Intro";
+import { MenuSection } from "@/components/site/Menu";
 import { FAQ, faqs, FinalCta, Footer, Gallery, Reviews } from "@/components/site/Outro";
 import { site } from "@/config/site";
 import { CartProvider } from "@/lib/cart";
@@ -79,7 +72,7 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: description },
       { name: "twitter:title", content: title },
       { name: "twitter:description", content: description },
-      { name: "theme-color", content: "#a3272a" },
+      { name: "theme-color", content: "#123b2c" },
     ],
     scripts: [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }],
   }),
@@ -92,16 +85,12 @@ function Index() {
       <Header />
       <main>
         <Hero />
-        <TrustBar />
-        <PainSolution />
-        <SignatureDishes />
-        <MenuSection />
-        <GuestCalculator />
-        <Occasions />
+        <KitchenStrip />
         <HowItWorks />
+        <MenuSection />
         <Gallery />
         <Reviews />
-        <Promise />
+        <Occasions />
         <FAQ />
         <FinalCta />
       </main>

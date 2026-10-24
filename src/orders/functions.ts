@@ -54,7 +54,7 @@ function generateReference(): string {
 }
 
 export const createOrder = createServerFn({ method: "POST" })
-  .inputValidator((data: CreateOrderInput) => orderInput.parse(data))
+  .validator((data: CreateOrderInput) => orderInput.parse(data))
   .handler(async ({ data }) => {
     if (data.website) return { ok: true as const, reference: generateReference() }; // silently drop bots
 
@@ -110,7 +110,7 @@ export const adminSession = createServerFn({ method: "GET" }).handler(async () =
 const failedLogins = new Map<string, { n: number; until: number }>();
 
 export const adminLogin = createServerFn({ method: "POST" })
-  .inputValidator((d: { password: string }) => z.object({ password: z.string().max(200) }).parse(d))
+  .validator((d: { password: string }) => z.object({ password: z.string().max(200) }).parse(d))
   .handler(async ({ data }) => {
     const auth = await import("./auth.server");
     const key = "global";
@@ -146,7 +146,7 @@ export const adminListOrders = createServerFn({ method: "GET" }).handler(
 );
 
 export const adminUpdateOrder = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     (d: { id: number; status?: (typeof ORDER_STATUSES)[number]; adminNotes?: string }) =>
       z
         .object({
@@ -169,7 +169,7 @@ export const adminUpdateOrder = createServerFn({ method: "POST" })
   });
 
 export const adminDeleteOrder = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: number }) => z.object({ id: z.number().int() }).parse(d))
+  .validator((d: { id: number }) => z.object({ id: z.number().int() }).parse(d))
   .handler(async ({ data }) => {
     const auth = await import("./auth.server");
     auth.requireAdmin();

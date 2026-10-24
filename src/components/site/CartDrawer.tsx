@@ -212,7 +212,7 @@ export function CartDrawer() {
           <SheetDescription>
             {step === "cart" &&
               (count
-                ? `${count} tray${count > 1 ? "s" : ""} · serves approx. ${servesApprox} guests`
+                ? `${count} tray${count > 1 ? "s" : ""}, feeds about ${servesApprox}`
                 : "Your order is empty — let's fix that.")}
             {step === "details" && "Pay at delivery or pickup — nothing is charged online."}
             {step === "done" && "Grazie! We're on it."}
@@ -266,7 +266,7 @@ export function CartDrawer() {
                             </button>
                           </div>
                           <p className="text-xs text-muted-foreground">
-                            {l.size} · {money(info.unitPrice)} each · serves ~{info.serves}
+                            {l.size}, {money(info.unitPrice)} each, feeds about {info.serves}
                           </p>
                           <div className="mt-2 flex items-center justify-between">
                             <QtyStepper
@@ -325,7 +325,7 @@ export function CartDrawer() {
                 onClick={() => setView("cart")}
                 className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-primary"
               >
-                <ArrowLeft className="size-4" /> Back to order ({count} trays · {money(subtotal)})
+                <ArrowLeft className="size-4" /> Back to order ({money(subtotal)})
               </button>
 
               {/* honeypot */}

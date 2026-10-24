@@ -206,6 +206,7 @@ async function createFileStore(): Promise<OrderStore> {
     }
   };
   const write = async (all: OrderRecord[]) => {
+    await fs.mkdir(dir, { recursive: true });
     const tmp = `${file}.tmp`;
     await fs.writeFile(tmp, JSON.stringify(all, null, 2));
     await fs.rename(tmp, file);
