@@ -1,14 +1,13 @@
 import { useMemo, useState } from "react";
-import { Check, Flame, Plus, Sparkles, Users } from "lucide-react";
+import { ArrowUp, Check, Flame, Plus, Users } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";
 import { categories, menu, signatureDishIds, getMenuItem, type MenuItem } from "@/data/menu";
-import { packages, packageTotal } from "@/data/packages";
-import { recommendTrays, suggestedItems } from "@/lib/calculator";
+import { recommendTrays } from "@/lib/calculator";
 import { money, useCart } from "@/lib/cart";
 import { cn } from "@/lib/utils";
-import { QtyStepper, Reveal, SafeImage, SectionHeading } from "./primitives";
+import { QtyStepper, Reveal, SafeImage, SectionHeading, scrollTo } from "./primitives";
 
 export function SignatureDishes() {
   const { add } = useCart();
@@ -237,95 +236,9 @@ function MenuCard({ item }: { item: MenuItem }) {
   );
 }
 
-export function Packages() {
-  const { addMany, setOpen } = useCart();
-  return (
-    <section id="packages" className="bg-secondary/60 py-24">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <SectionHeading
-          eyebrow="Party Packages"
-          title="Ready-Made Menus, Zero Guesswork"
-          subtitle="Our most-ordered combinations. Add a package, then adjust any quantity in your order."
-        />
-        <div className="grid gap-6 lg:grid-cols-3">
-          {packages.map((p, i) => {
-            const total = packageTotal(p);
-            return (
-              <Reveal key={p.id} delay={i * 90}>
-                <article
-                  className={cn(
-                    "relative flex h-full flex-col overflow-hidden rounded-3xl border bg-card shadow-soft",
-                    p.mostPopular
-                      ? "border-primary ring-2 ring-primary/30 lg:-translate-y-3"
-                      : "border-border",
-                  )}
-                >
-                  {p.mostPopular && (
-                    <span className="absolute right-4 top-4 z-10 inline-flex items-center gap-1 rounded-full bg-price px-3 py-1 text-xs font-bold text-primary-foreground">
-                      <Sparkles className="size-3.5" /> Most Popular
-                    </span>
-                  )}
-                  <SafeImage
-                    src={p.image}
-                    alt={`${p.name} package`}
-                    className="aspect-[16/10] w-full"
-                  />
-                  <div className="flex flex-1 flex-col p-7">
-                    <h3 className="text-2xl font-semibold">{p.name}</h3>
-                    <p className="mt-1 flex items-center gap-1.5 text-sm font-medium text-olive">
-                      <Users className="size-4" /> {p.guests}
-                    </p>
-                    <ul className="mt-5 flex-1 space-y-2.5">
-                      {p.items.map((it) => {
-                        const m = getMenuItem(it.id);
-                        if (!m) return null;
-                        return (
-                          <li key={it.id} className="flex items-start gap-2 text-sm">
-                            <Check className="mt-0.5 size-4 shrink-0 text-primary" />
-                            <span>
-                              {it.quantity > 1 ? `${it.quantity} × ` : ""}
-                              {m.name}{" "}
-                              <span className="text-muted-foreground">
-                                ({m.sizeLabel.toLowerCase()})
-                              </span>
-                            </span>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                    <div className="mt-6 border-t border-border pt-5">
-                      <p className="text-sm text-muted-foreground">Package total</p>
-                      <p className="font-serif text-4xl font-semibold text-price">{money(total)}</p>
-                    </div>
-                    <Button
-                      variant={p.mostPopular ? "hero" : "soft"}
-                      className="mt-5 h-12"
-                      onClick={() => {
-                        addMany(p.items, p.id);
-                        toast.success(`${p.name} package added`, {
-                          action: { label: "View order", onClick: () => setOpen(true) },
-                        });
-                      }}
-                    >
-                      <Plus /> Add this package
-                    </Button>
-                  </div>
-                </article>
-              </Reveal>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export function GuestCalculator() {
-  const { addMany, setOpen } = useCart();
   const [guests, setGuests] = useState(30);
   const rec = useMemo(() => recommendTrays(guests), [guests]);
-  const items = useMemo(() => suggestedItems(rec), [rec]);
-  const total = items.reduce((s, i) => s + (getMenuItem(i.id)?.price ?? 0) * i.quantity, 0);
 
   return (
     <section id="calculator" className="mx-auto max-w-7xl px-4 py-24 md:px-6">
@@ -378,42 +291,13 @@ export function GuestCalculator() {
               </div>
             ))}
           </div>
-          <ul className="mt-6 space-y-2 text-sm">
-            {items.map((i) => {
-              const m = getMenuItem(i.id);
-              return m ? (
-                <li key={i.id} className="flex justify-between gap-3">
-                  <span>
-                    {i.quantity} × {m.name}
-                  </span>
-                  <span className="tabular-nums text-muted-foreground">
-                    {money(m.price * i.quantity)}
-                  </span>
-                </li>
-              ) : null;
-            })}
-          </ul>
-          <div className="mt-6 flex flex-col gap-4 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground">Estimated total</p>
-              <p className="font-serif text-3xl font-semibold text-price">{money(total)}</p>
-              <p className="text-xs text-muted-foreground">
-                ≈ {money(guests ? total / guests : 0)} per guest
-              </p>
-            </div>
-            <Button
-              variant="hero"
-              className="h-12 px-6"
-              onClick={() => {
-                addMany(items);
-                toast.success(`Suggested menu for ${guests} guests added`, {
-                  action: { label: "View order", onClick: () => setOpen(true) },
-                });
-              }}
-            >
-              <Plus /> Add suggested menu
-            </Button>
-          </div>
+          <p className="mt-5 text-sm text-muted-foreground">
+            Number of half trays per category for {guests} guests. Pick your favorite dishes in each
+            category from the menu above.
+          </p>
+          <Button variant="hero" className="mt-5 h-12 px-6" onClick={() => scrollTo("menu")}>
+            Choose from the menu <ArrowUp />
+          </Button>
         </div>
       </div>
     </section>

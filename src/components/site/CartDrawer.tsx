@@ -163,7 +163,6 @@ export function CartDrawer() {
           },
         ];
       }),
-      packageIds: cart.packageIds,
       subtotal,
       source: "website",
     };
@@ -219,7 +218,7 @@ export function CartDrawer() {
                   </span>
                   <p className="mt-4 font-serif text-xl font-semibold">Nothing here yet</p>
                   <p className="mt-1 max-w-xs text-sm text-muted-foreground">
-                    Browse the menu, pick a party package or use the guest calculator.
+                    Browse the menu and add the trays you'd like.
                   </p>
                   <Button
                     variant="hero"

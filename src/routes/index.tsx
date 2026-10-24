@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CartDrawer } from "@/components/site/CartDrawer";
 import { Header, MobileBar } from "@/components/site/Header";
 import { About, Hero, HowItWorks, Occasions, TrustBar } from "@/components/site/Intro";
-import { GuestCalculator, MenuSection, Packages, SignatureDishes } from "@/components/site/Menu";
+import { GuestCalculator, MenuSection, SignatureDishes } from "@/components/site/Menu";
 import { Contact, FAQ, faqs, FinalCta, Footer, Gallery, Reviews } from "@/components/site/Outro";
 import { site } from "@/config/site";
 import { CartProvider } from "@/lib/cart";
@@ -90,7 +90,6 @@ function Index() {
         <Occasions />
         <SignatureDishes />
         <MenuSection />
-        <Packages />
         <GuestCalculator />
         <Gallery />
         <Reviews />

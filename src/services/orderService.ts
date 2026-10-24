@@ -29,7 +29,6 @@ export type OrderPayload = {
     quantity: number;
     lineTotal: number;
   }[];
-  packageIds: string[];
   subtotal: number;
   source: "website";
 };

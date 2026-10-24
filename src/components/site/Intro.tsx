@@ -177,7 +177,7 @@ export function HowItWorks() {
     {
       icon: Soup,
       title: "Choose your food",
-      text: "Pick trays from our menu or start with a ready-made package.",
+      text: "Pick your favorite trays from our menu.",
     },
     {
       icon: Users,

@@ -1,16 +1,22 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import { getMenuItem } from "@/data/menu";
 
 export type CartLine = { id: string; size: string; quantity: number };
 
 type CartCtx = {
   lines: CartLine[];
-  packageIds: string[];
   count: number;
   subtotal: number;
   servesApprox: number;
   add: (id: string, quantity?: number, size?: string) => void;
-  addMany: (items: { id: string; quantity: number }[], packageId?: string) => void;
   setQty: (id: string, size: string, quantity: number) => void;
   remove: (id: string, size: string) => void;
   clear: () => void;
@@ -34,7 +40,6 @@ export function lineInfo(l: CartLine) {
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
-  const [packageIds, setPackageIds] = useState<string[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [open, setOpen] = useState(false);
   const [presetEvent, setPresetEvent] = useState("");
@@ -44,8 +49,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const raw = localStorage.getItem(KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed.lines)) setLines(parsed.lines.filter((l: CartLine) => getMenuItem(l.id)));
-        if (Array.isArray(parsed.packageIds)) setPackageIds(parsed.packageIds);
+        if (Array.isArray(parsed.lines))
+          setLines(parsed.lines.filter((l: CartLine) => getMenuItem(l.id)));
       }
     } catch {
       /* ignore */
@@ -56,11 +61,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!loaded) return;
     try {
-      localStorage.setItem(KEY, JSON.stringify({ lines, packageIds }));
+      localStorage.setItem(KEY, JSON.stringify({ lines }));
     } catch {
       /* ignore */
     }
-  }, [lines, packageIds, loaded]);
+  }, [lines, loaded]);
 
   const add = useCallback((id: string, quantity = 1, size?: string) => {
     const item = getMenuItem(id);
@@ -73,14 +78,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const addMany = useCallback(
-    (items: { id: string; quantity: number }[], packageId?: string) => {
-      items.forEach((i) => add(i.id, i.quantity));
-      if (packageId) setPackageIds((p) => (p.includes(packageId) ? p : [...p, packageId]));
-    },
-    [add],
-  );
-
   const setQty = useCallback((id: string, size: string, quantity: number) => {
     setLines((prev) =>
       quantity <= 0
@@ -92,7 +89,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const remove = useCallback((id: string, size: string) => setQty(id, size, 0), [setQty]);
   const clear = useCallback(() => {
     setLines([]);
-    setPackageIds([]);
   }, []);
 
   const openWithEvent = useCallback((e: string) => {
@@ -101,7 +97,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(() => {
-    let count = 0, subtotal = 0, servesApprox = 0;
+    let count = 0,
+      subtotal = 0,
+      servesApprox = 0;
     for (const l of lines) {
       const info = lineInfo(l);
       if (!info) continue;
@@ -109,8 +107,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
       subtotal += info.lineTotal;
       servesApprox += info.serves * l.quantity;
     }
-    return { lines, packageIds, count, subtotal, servesApprox, add, addMany, setQty, remove, clear, open, setOpen, presetEvent, openWithEvent };
-  }, [lines, packageIds, add, addMany, setQty, remove, clear, open, presetEvent, openWithEvent]);
+    return {
+      lines,
+      count,
+      subtotal,
+      servesApprox,
+      add,
+      setQty,
+      remove,
+      clear,
+      open,
+      setOpen,
+      presetEvent,
+      openWithEvent,
+    };
+  }, [lines, add, setQty, remove, clear, open, presetEvent, openWithEvent]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
@@ -121,4 +132,5 @@ export function useCart() {
   return c;
 }
 
-export const money = (n: number) => `$${n.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+export const money = (n: number) =>
+  `$${n.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
