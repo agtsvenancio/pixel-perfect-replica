@@ -23,6 +23,15 @@ type CartCtx = {
   open: boolean;
   setOpen: (o: boolean) => void;
   presetEvent: string;
+  setPresetEvent: (eventType: string) => void;
+  /** Which screen the order drawer shows. */
+  view: "cart" | "details";
+  setView: (v: "cart" | "details") => void;
+  /** Open the drawer straight on the event-details form. */
+  checkout: () => void;
+  /** Quantity of an item (default size) currently in the order. */
+  qtyOf: (id: string, size?: string) => number;
+  /** Remember the event type, then send the visitor to the menu (or their order if it has items). */
   openWithEvent: (eventType: string) => void;
 };
 
@@ -43,6 +52,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [loaded, setLoaded] = useState(false);
   const [open, setOpen] = useState(false);
   const [presetEvent, setPresetEvent] = useState("");
+  const [view, setView] = useState<"cart" | "details">("cart");
 
   useEffect(() => {
     try {
@@ -91,10 +101,27 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setLines([]);
   }, []);
 
-  const openWithEvent = useCallback((e: string) => {
-    setPresetEvent(e);
+  const checkout = useCallback(() => {
+    setView("details");
     setOpen(true);
   }, []);
+
+  const openWithEvent = useCallback(
+    (e: string) => {
+      setPresetEvent(e);
+      if (lines.length > 0) setOpen(true);
+      else document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" });
+    },
+    [lines.length],
+  );
+
+  const qtyOf = useCallback(
+    (id: string, size?: string) => {
+      const s = size ?? getMenuItem(id)?.sizeLabel;
+      return lines.find((l) => l.id === id && l.size === s)?.quantity ?? 0;
+    },
+    [lines],
+  );
 
   const value = useMemo(() => {
     let count = 0,
@@ -119,9 +146,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
       open,
       setOpen,
       presetEvent,
+      setPresetEvent,
+      view,
+      setView,
+      checkout,
+      qtyOf,
       openWithEvent,
     };
-  }, [lines, add, setQty, remove, clear, open, presetEvent, openWithEvent]);
+  }, [lines, add, setQty, remove, clear, open, presetEvent, view, checkout, qtyOf, openWithEvent]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

@@ -157,7 +157,7 @@ export function FinalCta() {
         </h2>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-cream/85">
           Pick your trays, send your order in 2 minutes and we'll call you within{" "}
-          {site.responseHours} hours to confirm. No payment until then.
+          {site.responseHours} hours to confirm. You pay on delivery or pickup.
         </p>
         <div className="mt-9 flex flex-wrap justify-center gap-3">
           {count > 0 ? (

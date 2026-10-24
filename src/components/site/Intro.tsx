@@ -55,7 +55,7 @@ export function Hero() {
     "Homemade Italian recipes, cooked fresh for your event",
     `Generous trays — a half tray feeds ${site.portions.halfTray} people`,
     "Delivered hot and on time anywhere in NYC",
-    "Order online in 2 minutes — pay only after we confirm",
+    "Order online in 2 minutes — pay on delivery or pickup",
   ];
   return (
     <section id="top" className="relative overflow-hidden">
@@ -322,7 +322,7 @@ export function Promise() {
     {
       icon: CreditCard,
       title: "No payment online",
-      text: "Submitting your order costs nothing. You pay only after we confirm every detail with you.",
+      text: "Placing your order costs nothing. You pay when the food is delivered or when you pick it up.",
     },
     {
       icon: PhoneCall,

@@ -52,7 +52,7 @@ export const site = {
     setup:
       "Yes — buffet setup, chafing dishes and serving utensils are available on request. Mention it in your order notes and we'll confirm options and pricing.", // EDITABLE
     payment:
-      "We accept major credit cards, cash and corporate invoicing. Payment details are confirmed when we call to finalize your order.", // EDITABLE
+      "You pay when you receive your food — on delivery or at pickup. Nothing is charged online when you place your order.", // EDITABLE
   },
 
   social: {
