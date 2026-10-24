@@ -24,6 +24,7 @@ export function suggestedItems(rec: Recommendation): { id: string; quantity: num
     const counts = new Map<string, number>();
     for (let i = 0; i < rec[c.id]; i++) {
       const it = items[i % items.length];
+      if (!it) break;
       counts.set(it.id, (counts.get(it.id) ?? 0) + 1);
     }
     counts.forEach((quantity, id) => result.push({ id, quantity }));

@@ -1,24 +1,107 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { CartDrawer } from "@/components/site/CartDrawer";
+import { Header, MobileBar } from "@/components/site/Header";
+import { About, Hero, HowItWorks, Occasions, TrustBar } from "@/components/site/Intro";
+import { GuestCalculator, MenuSection, Packages, SignatureDishes } from "@/components/site/Menu";
+import { Contact, FAQ, faqs, FinalCta, Footer, Gallery, Reviews } from "@/components/site/Outro";
+import { site } from "@/config/site";
+import { CartProvider } from "@/lib/cart";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const title = "Italian Bites Catering | Italian Catering in Astoria & NYC";
+const description =
+  "Authentic Italian catering in New York City. Homemade trays of lasagna, penne vodka, steak and cannoli for holiday parties, corporate events and office lunches. Order online — delivery across NYC.";
+
+const dayCodes: Record<string, string> = {
+  Monday: "Mo",
+  Tuesday: "Tu",
+  Wednesday: "We",
+  Thursday: "Th",
+  Friday: "Fr",
+  Saturday: "Sa",
+  Sunday: "Su",
+};
+const to24 = (t: string) => {
+  const [hm = "0:00", ap] = t.split(" ");
+  const [hh = 0, m = 0] = hm.split(":").map(Number);
+  let h = hh;
+  if (ap === "PM" && h !== 12) h += 12;
+  if (ap === "AM" && h === 12) h = 0;
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": ["FoodEstablishment", "LocalBusiness"],
+      name: site.name,
+      description,
+      telephone: site.phoneHref.replace("tel:", ""),
+      email: site.email,
+      servesCuisine: "Italian",
+      priceRange: "$$",
+      areaServed: "New York City",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: site.address.street,
+        addressLocality: site.address.city,
+        addressRegion: site.address.region,
+        postalCode: site.address.postalCode,
+        addressCountry: site.address.country,
+      },
+      openingHours: site.hours.map((h) => `${dayCodes[h.day]} ${to24(h.open)}-${to24(h.close)}`),
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
+  ],
+};
+
+// og:image is intentionally omitted so the hosting can inject the project's social preview.
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { name: "twitter:title", content: title },
+      { name: "twitter:description", content: description },
+      { name: "theme-color", content: "#a3272a" },
+    ],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <CartProvider>
+      <Header />
+      <main>
+        <Hero />
+        <TrustBar />
+        <About />
+        <Occasions />
+        <SignatureDishes />
+        <MenuSection />
+        <Packages />
+        <GuestCalculator />
+        <Gallery />
+        <Reviews />
+        <HowItWorks />
+        <FAQ />
+        <Contact />
+        <FinalCta />
+      </main>
+      <Footer />
+      <MobileBar />
+      <CartDrawer />
+    </CartProvider>
   );
 }

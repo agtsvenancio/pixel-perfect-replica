@@ -4,7 +4,13 @@
 export type OrderPayload = {
   reference: string;
   createdAt: string;
-  customer: { name: string; company: string; email: string; phone: string; preferredContact: string };
+  customer: {
+    name: string;
+    company: string;
+    email: string;
+    phone: string;
+    preferredContact: string;
+  };
   event: {
     type: string;
     date: string;
@@ -14,7 +20,15 @@ export type OrderPayload = {
     address: string;
     notes: string;
   };
-  items: { id: string; name: string; category: string; size: string; unitPrice: number; quantity: number; lineTotal: number }[];
+  items: {
+    id: string;
+    name: string;
+    category: string;
+    size: string;
+    unitPrice: number;
+    quantity: number;
+    lineTotal: number;
+  }[];
   packageIds: string[];
   subtotal: number;
   source: "website";
@@ -28,7 +42,7 @@ export function generateReference(): string {
 }
 
 export async function submitOrder(payload: OrderPayload): Promise<{ ok: true; reference: string }> {
-  const url = import.meta.env.VITE_ORDER_API_URL as string | undefined;
+  const url = import.meta.env["VITE_ORDER_API_URL"] as string | undefined;
   if (!url) {
     console.log("[orderService] VITE_ORDER_API_URL not set — simulating success", payload);
     await new Promise((r) => setTimeout(r, 900));

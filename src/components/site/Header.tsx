@@ -25,16 +25,27 @@ export function Header() {
         </a>
         <nav className="hidden items-center gap-6 lg:flex">
           {navLinks.map((l) => (
-            <a key={l.id} href={`#${l.id}`} className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary">
+            <a
+              key={l.id}
+              href={`#${l.id}`}
+              className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
+            >
               {l.label}
             </a>
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <a href={site.phoneHref} className="hidden items-center gap-2 text-sm font-semibold hover:text-primary md:flex">
+          <a
+            href={site.phoneHref}
+            className="hidden items-center gap-2 text-sm font-semibold hover:text-primary md:flex"
+          >
             <Phone className="size-4 text-primary" /> {site.phone}
           </a>
-          <Button variant="hero" onClick={() => setOpen(true)} className="relative h-10 px-4 md:px-5">
+          <Button
+            variant="hero"
+            onClick={() => setOpen(true)}
+            className="relative h-10 px-4 md:px-5"
+          >
             <ShoppingBag />
             <span className="hidden sm:inline">Start Your Order</span>
             {count > 0 && (
@@ -43,7 +54,11 @@ export function Header() {
               </span>
             )}
           </Button>
-          <button className="p-2 lg:hidden" aria-label="Open menu" onClick={() => setMobile((m) => !m)}>
+          <button
+            className="p-2 lg:hidden"
+            aria-label="Open menu"
+            onClick={() => setMobile((m) => !m)}
+          >
             {mobile ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
         </div>
@@ -51,7 +66,12 @@ export function Header() {
       {mobile && (
         <nav className="border-t border-border bg-background px-4 py-3 lg:hidden">
           {navLinks.map((l) => (
-            <a key={l.id} href={`#${l.id}`} onClick={() => setMobile(false)} className="block py-2.5 font-medium">
+            <a
+              key={l.id}
+              href={`#${l.id}`}
+              onClick={() => setMobile(false)}
+              className="block py-2.5 font-medium"
+            >
               {l.label}
             </a>
           ))}
@@ -66,7 +86,9 @@ export function MobileBar() {
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-2 border-t border-border bg-background/95 p-3 backdrop-blur md:hidden">
       <Button variant="soft" asChild className="h-12">
-        <a href={site.phoneHref}><Phone /> Call</a>
+        <a href={site.phoneHref}>
+          <Phone /> Call
+        </a>
       </Button>
       <Button variant="hero" className="h-12" onClick={() => setOpen(true)}>
         <ShoppingBag /> Order Now{count > 0 ? ` (${count})` : ""}

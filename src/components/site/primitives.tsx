@@ -8,7 +8,7 @@ export function SafeImage({
   className,
   eager,
 }: {
-  src?: string;
+  src?: string | undefined;
   alt: string;
   className?: string;
   eager?: boolean;
@@ -16,7 +16,14 @@ export function SafeImage({
   const [failed, setFailed] = useState(false);
   if (!src || failed) {
     return (
-      <div role="img" aria-label={alt} className={cn("flex items-center justify-center bg-secondary text-muted-foreground/60", className)}>
+      <div
+        role="img"
+        aria-label={alt}
+        className={cn(
+          "flex items-center justify-center bg-secondary text-muted-foreground/60",
+          className,
+        )}
+      >
         <UtensilsCrossed className="size-10" strokeWidth={1.3} />
       </div>
     );
@@ -33,7 +40,15 @@ export function SafeImage({
   );
 }
 
-export function Reveal({ children, className, delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
+export function Reveal({
+  children,
+  className,
+  delay = 0,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const [vis, setVis] = useState(false);
   useEffect(() => {
@@ -41,7 +56,7 @@ export function Reveal({ children, className, delay = 0 }: { children: ReactNode
     if (!el) return;
     const io = new IntersectionObserver(
       ([e]) => {
-        if (e.isIntersecting) {
+        if (e?.isIntersecting) {
           setVis(true);
           io.disconnect();
         }
@@ -52,13 +67,27 @@ export function Reveal({ children, className, delay = 0 }: { children: ReactNode
     return () => io.disconnect();
   }, []);
   return (
-    <div ref={ref} style={{ transitionDelay: `${delay}ms` }} className={cn("reveal", vis && "is-visible", className)}>
+    <div
+      ref={ref}
+      style={{ transitionDelay: `${delay}ms` }}
+      className={cn("reveal", vis && "is-visible", className)}
+    >
       {children}
     </div>
   );
 }
 
-export function SectionHeading({ eyebrow, title, subtitle, center = true }: { eyebrow?: string; title: string; subtitle?: string; center?: boolean }) {
+export function SectionHeading({
+  eyebrow,
+  title,
+  subtitle,
+  center = true,
+}: {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  center?: boolean;
+}) {
   return (
     <Reveal className={cn("mb-12 max-w-2xl", center && "mx-auto text-center")}>
       {eyebrow && <p className="eyebrow mb-3">{eyebrow}</p>}
@@ -68,14 +97,38 @@ export function SectionHeading({ eyebrow, title, subtitle, center = true }: { ey
   );
 }
 
-export function QtyStepper({ value, onChange, min = 1 }: { value: number; onChange: (n: number) => void; min?: number }) {
+export function QtyStepper({
+  value,
+  onChange,
+  min = 1,
+}: {
+  value: number;
+  onChange: (n: number) => void;
+  min?: number;
+}) {
   return (
     <div className="inline-flex items-center rounded-full border border-border bg-background">
-      <button type="button" aria-label="Decrease quantity" className="h-9 w-9 rounded-full text-lg hover:text-primary disabled:opacity-40" disabled={value <= min} onClick={() => onChange(value - 1)}>−</button>
+      <button
+        type="button"
+        aria-label="Decrease quantity"
+        className="h-9 w-9 rounded-full text-lg hover:text-primary disabled:opacity-40"
+        disabled={value <= min}
+        onClick={() => onChange(value - 1)}
+      >
+        −
+      </button>
       <span className="w-7 text-center text-sm font-semibold tabular-nums">{value}</span>
-      <button type="button" aria-label="Increase quantity" className="h-9 w-9 rounded-full text-lg hover:text-primary" onClick={() => onChange(value + 1)}>+</button>
+      <button
+        type="button"
+        aria-label="Increase quantity"
+        className="h-9 w-9 rounded-full text-lg hover:text-primary"
+        onClick={() => onChange(value + 1)}
+      >
+        +
+      </button>
     </div>
   );
 }
 
-export const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+export const scrollTo = (id: string) =>
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
