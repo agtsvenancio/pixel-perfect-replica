@@ -12,4 +12,7 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Pre-compress static files (JS, CSS, fonts) so the Node server sends gzip/brotli.
+  // (Passed through to Nitro as-is; the Lovable config type only lists a few keys.)
+  nitro: { compressPublicAssets: { gzip: true, brotli: true } } as { preset?: string },
 });

@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { UtensilsCrossed } from "lucide-react";
+import { srcSetFor } from "@/lib/images";
 import { cn } from "@/lib/utils";
 
 export function SafeImage({
@@ -7,11 +8,14 @@ export function SafeImage({
   alt,
   className,
   eager,
+  sizes = "(min-width: 1024px) 50vw, 100vw",
 }: {
   src?: string | undefined;
   alt: string;
   className?: string;
   eager?: boolean;
+  /** How wide the image is shown, so the browser can pick the smallest file that fits. */
+  sizes?: string;
 }) {
   const [failed, setFailed] = useState(false);
   if (!src || failed) {
@@ -24,15 +28,19 @@ export function SafeImage({
           className,
         )}
       >
-        <UtensilsCrossed className="size-10" strokeWidth={1.3} />
+        <UtensilsCrossed className="size-8" strokeWidth={1.3} />
       </div>
     );
   }
+  const srcSet = srcSetFor(src);
   return (
     <img
       src={src}
+      srcSet={srcSet}
+      sizes={srcSet ? sizes : undefined}
       alt={alt}
       loading={eager ? "eager" : "lazy"}
+      fetchPriority={eager ? "high" : "auto"}
       decoding="async"
       onError={() => setFailed(true)}
       className={cn("object-cover", className)}

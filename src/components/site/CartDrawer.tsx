@@ -252,6 +252,7 @@ export function CartDrawer() {
                         <SafeImage
                           src={info.item.image}
                           alt={info.item.name}
+                          sizes="64px"
                           className="size-16 shrink-0 rounded-xl"
                         />
                         <div className="min-w-0 flex-1">

@@ -21,6 +21,7 @@ export function Gallery() {
             key={g.alt}
             src={g.src}
             alt={g.alt}
+            sizes={i === 0 ? "(min-width: 768px) 50vw, 100vw" : "(min-width: 768px) 25vw, 50vw"}
             className={`h-full w-full ${spans[i] ?? ""}`}
           />
         ))}
@@ -169,12 +170,12 @@ export function Footer() {
           <p>
             Open every day, {site.hours[0]?.open} to {site.hours[0]?.close}
           </p>
-          <p className="mt-2 flex gap-4">
+          <p className="mt-1 flex gap-6">
             <a
               href={site.social.instagram}
               target="_blank"
               rel="noreferrer"
-              className="hover:text-background hover:underline"
+              className="inline-flex min-h-11 items-center hover:text-background hover:underline"
             >
               Instagram
             </a>
@@ -182,14 +183,14 @@ export function Footer() {
               href={site.social.facebook}
               target="_blank"
               rel="noreferrer"
-              className="hover:text-background hover:underline"
+              className="inline-flex min-h-11 items-center hover:text-background hover:underline"
             >
               Facebook
             </a>
           </p>
         </div>
       </div>
-      <p className="mx-auto mt-10 max-w-7xl px-4 text-xs text-background/50 md:px-6">
+      <p className="mx-auto mt-10 max-w-7xl px-4 text-xs text-background/75 md:px-6">
         © {new Date().getFullYear()} {site.name}
       </p>
     </footer>

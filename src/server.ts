@@ -44,12 +44,35 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+/** Gzip HTML pages (static assets are already pre-compressed at build time). */
+function compressHtml(request: Request, response: Response): Response {
+  const type = response.headers.get("content-type") ?? "";
+  if (
+    !response.body ||
+    !type.includes("text/html") ||
+    response.headers.has("content-encoding") ||
+    !(request.headers.get("accept-encoding") ?? "").includes("gzip") ||
+    typeof CompressionStream === "undefined"
+  ) {
+    return response;
+  }
+  const headers = new Headers(response.headers);
+  headers.set("content-encoding", "gzip");
+  headers.delete("content-length");
+  headers.append("vary", "Accept-Encoding");
+  return new Response(response.body.pipeThrough(new CompressionStream("gzip")), {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      return compressHtml(request, await normalizeCatastrophicSsrResponse(response));
     } catch (error) {
       console.error(error);
       return new Response(renderErrorPage(), {

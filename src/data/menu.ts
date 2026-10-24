@@ -1,18 +1,18 @@
 import type { CategoryId } from "@/config/site";
-import antipasto from "@/assets/antipasto.jpg";
-import bruschetta from "@/assets/bruschetta.jpg";
-import wings from "@/assets/wings.jpg";
-import chicken from "@/assets/chicken.jpg";
-import steak from "@/assets/steak.jpg";
-import shortribs from "@/assets/shortribs.jpg";
-import penne from "@/assets/penne.jpg";
-import lasagna from "@/assets/lasagna.jpg";
-import spaghetti from "@/assets/spaghetti.jpg";
-import salad from "@/assets/salad.jpg";
-import vegetables from "@/assets/vegetables.jpg";
-import cheesecake from "@/assets/cheesecake.jpg";
-import chocolate from "@/assets/chocolate.jpg";
-import cannoli from "@/assets/cannoli.jpg";
+import antipasto from "@/assets/antipasto.webp";
+import bruschetta from "@/assets/bruschetta.webp";
+import wings from "@/assets/wings.webp";
+import chicken from "@/assets/chicken.webp";
+import steak from "@/assets/steak.webp";
+import shortribs from "@/assets/shortribs.webp";
+import penne from "@/assets/penne.webp";
+import lasagna from "@/assets/lasagna.webp";
+import spaghetti from "@/assets/spaghetti.webp";
+import salad from "@/assets/salad.webp";
+import vegetables from "@/assets/vegetables.webp";
+import cheesecake from "@/assets/cheesecake.webp";
+import chocolate from "@/assets/chocolate.webp";
+import cannoli from "@/assets/cannoli.webp";
 
 export type MenuSize = { label: string; price: number; servesApprox: number };
 

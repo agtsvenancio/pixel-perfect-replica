@@ -1,17 +1,17 @@
-import holiday from "@/assets/holiday.jpg";
-import office from "@/assets/office.jpg";
-import family from "@/assets/family.jpg";
-import party from "@/assets/party.jpg";
-import hero from "@/assets/hero.jpg";
-import antipasto from "@/assets/antipasto.jpg";
-import lasagna from "@/assets/lasagna.jpg";
-import penne from "@/assets/penne.jpg";
-import cannoli from "@/assets/cannoli.jpg";
-import cheesecake from "@/assets/cheesecake.jpg";
-import steak from "@/assets/steak.jpg";
-import kitchen from "@/assets/kitchen.jpg";
-import spaghetti from "@/assets/spaghetti.jpg";
-import chocolate from "@/assets/chocolate.jpg";
+import holiday from "@/assets/holiday.webp";
+import office from "@/assets/office.webp";
+import family from "@/assets/family.webp";
+import party from "@/assets/party.webp";
+import hero from "@/assets/hero.webp";
+import antipasto from "@/assets/antipasto.webp";
+import lasagna from "@/assets/lasagna.webp";
+import penne from "@/assets/penne.webp";
+import cannoli from "@/assets/cannoli.webp";
+import cheesecake from "@/assets/cheesecake.webp";
+import steak from "@/assets/steak.webp";
+import kitchen from "@/assets/kitchen.webp";
+import spaghetti from "@/assets/spaghetti.webp";
+import chocolate from "@/assets/chocolate.webp";
 
 export const images = { hero, kitchen, finalCta: holiday };
 

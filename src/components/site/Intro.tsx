@@ -73,7 +73,7 @@ export function KitchenStrip() {
           </h2>
           <button
             onClick={() => scrollTo("menu")}
-            className="font-semibold underline decoration-2 underline-offset-4 hover:text-primary"
+            className="inline-flex min-h-11 items-center font-semibold underline decoration-2 underline-offset-4 hover:text-primary"
           >
             Full menu with prices
           </button>
@@ -87,7 +87,12 @@ export function KitchenStrip() {
               key={d.id}
               className="w-[78%] shrink-0 snap-start sm:w-[42%] lg:w-[calc((100%-3rem)/4)]"
             >
-              <SafeImage src={d.image} alt={d.name} className="aspect-[4/5] w-full" />
+              <SafeImage
+                src={d.image}
+                alt={d.name}
+                sizes="(min-width: 1024px) 300px, (min-width: 640px) 42vw, 78vw"
+                className="aspect-[4/5] w-full"
+              />
               <figcaption className="mt-3">
                 <div className="flex items-baseline justify-between gap-3">
                   <span className="text-lg font-bold leading-snug">{d.name}</span>
@@ -101,7 +106,7 @@ export function KitchenStrip() {
                     add(d.id);
                     toast.success(`Added ${d.name}`);
                   }}
-                  className="mt-2 inline-flex items-center gap-1.5 font-semibold text-primary hover:underline"
+                  className="mt-1 inline-flex min-h-11 items-center gap-1.5 font-semibold text-primary hover:underline"
                 >
                   <Plus className="size-4" />
                   {inOrder ? `Add another (${inOrder} in your order)` : "Add to order"}
@@ -166,7 +171,7 @@ export function Occasions() {
                 openWithEvent(o.eventType);
                 toast(`Got it: ${o.eventType.toLowerCase()}. Now pick your trays.`);
               }}
-              className="underline decoration-foil decoration-2 underline-offset-[6px] hover:text-primary hover:decoration-primary"
+              className="min-h-11 text-left underline decoration-foil decoration-2 underline-offset-[6px] hover:text-primary hover:decoration-primary"
             >
               {o.title}
             </button>

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CartDrawer } from "@/components/site/CartDrawer";
 import { Header, MobileBar } from "@/components/site/Header";
+import { LazyCartDrawer } from "@/components/site/LazyCartDrawer";
 import { Hero, HowItWorks, KitchenStrip, Occasions } from "@/components/site/Intro";
 import { MenuSection } from "@/components/site/Menu";
 import { FAQ, faqs, FinalCta, Footer, Gallery, Reviews } from "@/components/site/Outro";
@@ -96,7 +96,7 @@ function Index() {
       </main>
       <Footer />
       <MobileBar />
-      <CartDrawer />
+      <LazyCartDrawer />
     </CartProvider>
   );
 }

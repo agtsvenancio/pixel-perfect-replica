@@ -32,7 +32,12 @@ function AddControl({ item }: { item: MenuItem }) {
 function BoardRow({ item }: { item: MenuItem }) {
   return (
     <li className="grid grid-cols-[4.5rem_1fr] gap-4 border-b border-border py-5 sm:grid-cols-[6rem_1fr]">
-      <SafeImage src={item.image} alt={item.name} className="aspect-square w-full rounded-md" />
+      <SafeImage
+        src={item.image}
+        alt={item.name}
+        sizes="96px"
+        className="aspect-square w-full rounded-md"
+      />
       <div className="min-w-0">
         <div className="flex items-baseline">
           <h4 className="min-w-0 font-sans text-lg font-bold leading-snug [font-stretch:100%] [letter-spacing:0] sm:text-xl">
