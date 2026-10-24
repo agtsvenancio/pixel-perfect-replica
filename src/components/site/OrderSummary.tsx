@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
+import { ShoppingBag, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";
 import { lineInfo, money, useCart } from "@/lib/cart";
 import { cn } from "@/lib/utils";
+import { QtyStepper } from "./primitives";
 
 /** Plain-language progress toward the minimum order. */
 export function MinimumProgress({ subtotal, className }: { subtotal: number; className?: string }) {
@@ -10,89 +11,76 @@ export function MinimumProgress({ subtotal, className }: { subtotal: number; cla
   const pct = Math.min(100, Math.round((subtotal / site.minimumOrder) * 100));
   return (
     <div className={className}>
-      <div className="h-1.5 bg-foreground/15" aria-hidden="true">
+      <div className="h-2 overflow-hidden rounded-full bg-secondary" aria-hidden="true">
         <div
           className={cn(
-            "h-full transition-[width] duration-500",
+            "h-full rounded-full transition-[width] duration-500",
             missing > 0 ? "bg-primary" : "bg-olive",
           )}
           style={{ width: `${pct}%` }}
         />
       </div>
-      <p className="mt-1.5 text-sm">
+      <p className="mt-1.5 text-sm text-muted-foreground">
         {missing > 0 ? (
           <>
-            Add <strong className="tabular">{money(missing)}</strong> more to reach the{" "}
-            {money(site.minimumOrder)} minimum.
+            Add <strong className="tabular text-foreground">{money(missing)}</strong> more to reach
+            the {money(site.minimumOrder)} minimum
           </>
         ) : (
-          <span className="font-semibold text-olive">Minimum order reached.</span>
+          <span className="font-medium text-olive">Minimum order reached</span>
         )}
       </p>
     </div>
   );
 }
 
-/**
- * The order slip: a yellow paper ticket that sits beside the menu board.
- * New and changed lines get a short "stamp" so you see what just changed.
- */
+/** Order panel beside the menu on large screens. */
 export function OrderSlip() {
-  const { lines, subtotal, count, servesApprox, setQty, checkout } = useCart();
+  const { lines, subtotal, count, servesApprox, setQty, remove, checkout } = useCart();
   const below = subtotal < site.minimumOrder;
-  const ready = useRef(false);
-  useEffect(() => {
-    const t = setTimeout(() => (ready.current = true), 800);
-    return () => clearTimeout(t);
-  }, []);
-
   return (
-    <aside aria-label="Your order" className="sticky top-20 hidden self-start lg:block">
-      <div className="perforated slip bg-ticket px-5 pb-7 pt-8 text-[#2b2410]">
-        <div className="flex items-baseline justify-between border-b-2 border-dashed border-[#2b2410]/40 pb-3">
-          <p className="sign text-2xl">Order slip</p>
-          <p className="text-sm">{count ? `Feeds about ${servesApprox}` : "Empty"}</p>
+    <aside aria-label="Your order" className="sticky top-24 hidden self-start lg:block">
+      <div className="flex max-h-[calc(100vh-7.5rem)] flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-soft">
+        <div className="border-b border-border px-5 py-4">
+          <p className="text-lg font-bold">Your order</p>
+          <p className="text-sm text-muted-foreground">
+            {count
+              ? `${count} ${count === 1 ? "tray" : "trays"}, feeds about ${servesApprox}`
+              : "Nothing added yet"}
+          </p>
         </div>
 
         {lines.length === 0 ? (
-          <p className="py-8 text-base leading-relaxed">
-            Nothing on the slip yet. Press <strong>Add</strong> next to any dish and it will show up
-            here.
-          </p>
+          <div className="flex flex-col items-center px-6 py-10 text-center text-muted-foreground">
+            <span className="flex size-12 items-center justify-center rounded-full bg-secondary text-primary">
+              <ShoppingBag className="size-5" />
+            </span>
+            <p className="mt-3 text-sm">Tap “Add” on any dish to start your order.</p>
+          </div>
         ) : (
-          <ul className="max-h-[calc(100vh-24rem)] overflow-y-auto py-2">
+          <ul className="flex-1 divide-y divide-border overflow-y-auto px-5">
             {lines.map((l) => {
               const info = lineInfo(l);
               if (!info) return null;
               return (
-                <li
-                  key={`${l.id}-${l.size}-${l.quantity}`}
-                  className={cn(
-                    "border-b border-dashed border-[#2b2410]/25 py-2.5",
-                    ready.current && "stamp-in",
-                  )}
-                >
-                  <div className="flex items-baseline text-base">
-                    <span className="font-bold tabular">{l.quantity}×</span>
-                    <span className="ml-2 min-w-0 leading-snug">{info.item.name}</span>
-                    <span className="leader border-[#2b2410]/30" />
-                    <span className="tabular font-bold">{money(info.lineTotal)}</span>
+                <li key={`${l.id}-${l.size}`} className="py-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="text-sm font-semibold leading-snug">{info.item.name}</p>
+                    <button
+                      aria-label={`Remove ${info.item.name}`}
+                      onClick={() => remove(l.id, l.size)}
+                      className="text-muted-foreground hover:text-primary"
+                    >
+                      <Trash2 className="size-4" />
+                    </button>
                   </div>
-                  <div className="mt-1 flex gap-3 pl-7 text-sm">
-                    <button
-                      onClick={() => setQty(l.id, l.size, l.quantity - 1)}
-                      className="underline underline-offset-2 hover:text-primary"
-                      aria-label={`One less ${info.item.name}`}
-                    >
-                      one less
-                    </button>
-                    <button
-                      onClick={() => setQty(l.id, l.size, l.quantity + 1)}
-                      className="underline underline-offset-2 hover:text-primary"
-                      aria-label={`One more ${info.item.name}`}
-                    >
-                      one more
-                    </button>
+                  <div className="mt-2 flex items-center justify-between">
+                    <QtyStepper
+                      value={l.quantity}
+                      min={0}
+                      onChange={(n) => setQty(l.id, l.size, n)}
+                    />
+                    <span className="tabular text-sm font-semibold">{money(info.lineTotal)}</span>
                   </div>
                 </li>
               );
@@ -100,26 +88,24 @@ export function OrderSlip() {
           </ul>
         )}
 
-        <div className="mt-2 flex items-baseline justify-between border-t-4 border-double border-[#2b2410] pt-3">
-          <span className="text-lg font-bold">Total</span>
-          <span className="sign tabular text-3xl">{money(subtotal)}</span>
+        <div className="space-y-3 border-t border-border bg-secondary/60 px-5 py-4">
+          <div className="flex items-baseline justify-between">
+            <span className="font-semibold">Subtotal</span>
+            <span className="tabular text-2xl font-bold">{money(subtotal)}</span>
+          </div>
+          {lines.length > 0 && <MinimumProgress subtotal={subtotal} />}
+          <Button
+            variant="hero"
+            className="h-12 w-full text-base"
+            disabled={lines.length === 0 || below}
+            onClick={checkout}
+          >
+            Checkout
+          </Button>
+          <p className="text-center text-xs text-muted-foreground">
+            No payment now. Pay on delivery or pickup.
+          </p>
         </div>
-        <p className="mt-1 text-sm">
-          Paid on delivery or at pickup. Tax and delivery confirmed by phone.
-        </p>
-        {lines.length > 0 && <MinimumProgress subtotal={subtotal} className="mt-4" />}
-        <Button
-          variant="hero"
-          className="mt-4 h-12 w-full text-base"
-          disabled={lines.length === 0 || below}
-          onClick={checkout}
-        >
-          {lines.length === 0
-            ? "Add trays to order"
-            : below
-              ? `Minimum is ${money(site.minimumOrder)}`
-              : "Continue to delivery details"}
-        </Button>
       </div>
     </aside>
   );

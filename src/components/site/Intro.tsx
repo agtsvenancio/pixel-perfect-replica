@@ -1,120 +1,153 @@
-import { Phone, Plus } from "lucide-react";
+import {
+  ArrowRight,
+  Banknote,
+  CalendarClock,
+  Check,
+  PhoneCall,
+  Phone,
+  Truck,
+  Users,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";
 import { images, occasions } from "@/data/content";
-import { getMenuItem, signatureDishIds, type MenuItem } from "@/data/menu";
+import { menu } from "@/data/menu";
 import { money, useCart } from "@/lib/cart";
 import { SafeImage, scrollTo } from "./primitives";
 
+const lowest = Math.min(...menu.map((m) => m.price));
+
 export function Hero() {
-  const facts = [
-    { k: "Half trays feed", v: `${site.portions.halfTray} people` },
-    { k: "Minimum order", v: money(site.minimumOrder) },
-    { k: "Order ahead", v: `${site.leadTimeDays} days` },
-    { k: "Payment", v: "On delivery or pickup" },
+  const points = [
+    "Homemade lasagna, pastas, steak, salads and desserts",
+    `Each half tray feeds ${site.portions.halfTray} people`,
+    "Delivered across NYC, or pick up in Astoria",
+    "Order online now, pay when you receive the food",
   ];
   return (
-    <section id="top" className="border-b-2 border-foreground">
-      <div className="grid lg:grid-cols-2">
-        <div className="flex flex-col justify-center px-4 py-12 md:px-6 md:py-16 lg:pl-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] lg:pr-12">
-          <h1 className="text-[2.6rem] sm:text-6xl lg:text-[3.5rem] xl:text-[4rem]">
-            Italian catering trays, delivered across New York.
+    <section id="top" className="relative isolate overflow-hidden bg-foreground">
+      <SafeImage
+        src={images.hero}
+        alt="Trays of penne, lasagna and antipasto on a catering buffet"
+        eager
+        sizes="100vw"
+        className="absolute inset-0 -z-10 h-full w-full"
+      />
+      <div className="overlay-hero absolute inset-0 -z-10" />
+      <div className="mx-auto max-w-7xl px-4 pb-14 pt-14 md:px-6 md:pb-24 md:pt-24">
+        <div className="max-w-2xl text-white">
+          <h1 className="text-4xl leading-[1.08] md:text-6xl">
+            Italian catering trays for your next event in New York
           </h1>
-          <p className="mt-6 max-w-[34rem] text-lg leading-relaxed text-muted-foreground md:text-xl">
-            Lasagna, penne vodka, grilled skirt steak and fresh cannoli, cooked in our Astoria
-            kitchen for office lunches, holiday parties and family gatherings.
+          <p className="mt-5 max-w-xl text-lg text-white/85 md:text-xl">
+            Pick your trays, choose delivery or pickup, and we take care of the food. Trays from{" "}
+            {money(lowest)}.
           </p>
+          <ul className="mt-6 grid gap-2.5">
+            {points.map((p) => (
+              <li key={p} className="flex items-start gap-2.5 text-white/90">
+                <Check className="mt-0.5 size-5 shrink-0 text-[#7fd49b]" strokeWidth={2.5} />
+                {p}
+              </li>
+            ))}
+          </ul>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button variant="hero" className="h-12 px-6 text-base" onClick={() => scrollTo("menu")}>
-              See the menu and prices
+            <Button variant="hero" className="h-13 px-7 text-base" onClick={() => scrollTo("menu")}>
+              See the menu & order
+              <ArrowRight />
             </Button>
-            <Button variant="soft" className="h-12 px-5 text-base" asChild>
+            <Button variant="glass" className="h-13 px-6 text-base" asChild>
               <a href={site.phoneHref}>
-                <Phone /> {site.phone}
+                <Phone /> Call {site.phone}
               </a>
             </Button>
           </div>
-          <dl className="mt-10 grid grid-cols-2 border-t-2 border-foreground sm:grid-cols-4">
-            {facts.map((f) => (
-              <div key={f.k} className="border-b border-border py-3 pr-3 sm:border-b-0">
-                <dt className="text-sm text-muted-foreground">{f.k}</dt>
-                <dd className="mt-0.5 font-bold leading-tight">{f.v}</dd>
-              </div>
-            ))}
-          </dl>
         </div>
-        <figure className="relative min-h-[320px] lg:min-h-[560px]">
-          <SafeImage
-            src={images.hero}
-            alt="Catering buffet with trays of lasagna, penne and antipasto"
-            eager
-            className="absolute inset-0 h-full w-full"
-          />
-          <figcaption className="absolute bottom-0 left-0 bg-background px-3 py-2 text-sm">
-            Lasagna, penne vodka and antipasto trays from our kitchen
-          </figcaption>
-        </figure>
       </div>
     </section>
   );
 }
 
-/** Big, appetizing photos of the signature trays, each addable straight to the order. */
-export function KitchenStrip() {
-  const { add, qtyOf } = useCart();
-  const dishes = signatureDishIds.map(getMenuItem).filter(Boolean) as MenuItem[];
+/** The four things people worry about before ordering catering, answered up front. */
+export function Assurances() {
+  const items = [
+    { icon: Banknote, title: "No payment online", text: "You pay on delivery or at pickup." },
+    {
+      icon: PhoneCall,
+      title: "We confirm by phone",
+      text: `A real person calls you within ${site.responseHours} hours.`,
+    },
+    {
+      icon: Users,
+      title: "The right amount of food",
+      text: `Half trays feed ${site.portions.halfTray}. Our calculator does the math.`,
+    },
+    {
+      icon: CalendarClock,
+      title: `Order ${site.leadTimeDays} days ahead`,
+      text: `Minimum order ${money(site.minimumOrder)}.`,
+    },
+  ];
   return (
-    <section aria-labelledby="kitchen-title" className="py-14 md:py-20">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-          <h2 id="kitchen-title" className="text-3xl md:text-5xl">
-            What people order most
-          </h2>
+    <section aria-label="Why ordering is easy" className="border-b border-border bg-background">
+      <ul className="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-5 px-4 py-8 sm:grid-cols-2 md:px-6 lg:grid-cols-4">
+        {items.map(({ icon: Icon, title, text }) => (
+          <li key={title} className="flex gap-3.5">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-primary">
+              <Icon className="size-5" />
+            </span>
+            <div>
+              <p className="font-semibold leading-snug">{title}</p>
+              <p className="text-sm text-muted-foreground">{text}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+/** "What's the event?" — lets visitors recognise their situation and jump to the menu. */
+export function Occasions() {
+  const { openWithEvent } = useCart();
+  const picks = occasions.filter((o) =>
+    ["Office Lunch/Meeting", "Holiday Party", "Family Gathering", "Corporate Event"].includes(
+      o.eventType,
+    ),
+  );
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-16 md:px-6 md:py-20">
+      <h2 className="text-3xl md:text-4xl">What are you planning?</h2>
+      <p className="mt-2 max-w-xl text-lg text-muted-foreground">
+        Office lunches for 15 or holiday parties for 200. Pick your event and go straight to the
+        menu.
+      </p>
+      <div className="mt-8 grid grid-cols-2 gap-3 md:gap-5 lg:grid-cols-4">
+        {picks.map((o) => (
           <button
-            onClick={() => scrollTo("menu")}
-            className="inline-flex min-h-11 items-center font-semibold underline decoration-2 underline-offset-4 hover:text-primary"
+            key={o.title}
+            onClick={() => {
+              openWithEvent(o.eventType);
+              toast(`${o.title}: now pick your trays`);
+            }}
+            className="group relative aspect-[4/5] overflow-hidden rounded-2xl text-left focus-visible:outline-offset-4"
           >
-            Full menu with prices
+            <SafeImage
+              src={o.image}
+              alt=""
+              sizes="(min-width: 1024px) 25vw, 50vw"
+              className="absolute inset-0 h-full w-full transition-transform duration-500 group-hover:scale-105"
+            />
+            <span className="overlay-card absolute inset-0" />
+            <span className="absolute inset-x-0 bottom-0 p-4 text-white md:p-5">
+              <span className="block text-lg font-bold leading-snug md:text-xl">{o.title}</span>
+              <span className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-white/85 group-hover:text-white">
+                See the menu <ArrowRight className="size-4" />
+              </span>
+            </span>
           </button>
-        </div>
-      </div>
-      <div className="mx-auto flex max-w-7xl snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 md:scroll-px-6 md:px-6">
-        {dishes.map((d) => {
-          const inOrder = qtyOf(d.id);
-          return (
-            <figure
-              key={d.id}
-              className="w-[78%] shrink-0 snap-start sm:w-[42%] lg:w-[calc((100%-3rem)/4)]"
-            >
-              <SafeImage
-                src={d.image}
-                alt={d.name}
-                sizes="(min-width: 1024px) 300px, (min-width: 640px) 42vw, 78vw"
-                className="aspect-[4/5] w-full"
-              />
-              <figcaption className="mt-3">
-                <div className="flex items-baseline justify-between gap-3">
-                  <span className="text-lg font-bold leading-snug">{d.name}</span>
-                  <span className="tabular text-lg font-bold text-price">{money(d.price)}</span>
-                </div>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {d.sizeLabel}, feeds about {d.servesApprox}
-                </p>
-                <button
-                  onClick={() => {
-                    add(d.id);
-                    toast.success(`Added ${d.name}`);
-                  }}
-                  className="mt-1 inline-flex min-h-11 items-center gap-1.5 font-semibold text-primary hover:underline"
-                >
-                  <Plus className="size-4" />
-                  {inOrder ? `Add another (${inOrder} in your order)` : "Add to order"}
-                </button>
-              </figcaption>
-            </figure>
-          );
-        })}
+        ))}
       </div>
     </section>
   );
@@ -123,61 +156,44 @@ export function KitchenStrip() {
 export function HowItWorks() {
   const steps = [
     {
-      title: "Pick your trays",
-      text: "Every price and portion is on the menu. Add what you need.",
+      icon: Users,
+      title: "Choose your trays",
+      text: "Prices and portions are on every dish. Not sure how much? Use the guest calculator.",
     },
     {
-      title: "Tell us when and where",
-      text: "Delivery anywhere in NYC, or pickup at our kitchen. Pick the date and time.",
+      icon: Truck,
+      title: "Delivery or pickup",
+      text: "Tell us the date, time and address. Delivery anywhere in NYC, or pick up in Astoria.",
     },
     {
-      title: "We call, you pay at the door",
-      text: `We confirm within ${site.responseHours} hours. You pay when the food is delivered or picked up.`,
+      icon: PhoneCall,
+      title: "We confirm, you pay at the door",
+      text: `We call within ${site.responseHours} hours to confirm. You pay when the food arrives.`,
     },
   ];
   return (
-    <section id="how-it-works" className="border-y-2 border-foreground bg-secondary">
-      <div className="mx-auto max-w-7xl px-4 py-14 md:px-6 md:py-16">
+    <section id="how-it-works" className="bg-secondary">
+      <div className="mx-auto max-w-7xl px-4 py-16 md:px-6 md:py-20">
         <h2 className="text-3xl md:text-4xl">How ordering works</h2>
-        <ol className="mt-8 grid gap-8 md:grid-cols-3">
+        <ol className="mt-10 grid gap-6 md:grid-cols-3">
           {steps.map((s, i) => (
-            <li key={s.title} className="flex gap-4">
-              <span className="sign text-5xl leading-none text-primary" aria-hidden="true">
-                {i + 1}
-              </span>
-              <div>
+            <li key={s.title} className="rounded-2xl bg-background p-6 md:p-7">
+              <div className="flex items-center gap-3">
+                <span className="flex size-9 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+                  {i + 1}
+                </span>
                 <h3 className="text-xl">{s.title}</h3>
-                <p className="mt-2 text-muted-foreground">{s.text}</p>
               </div>
+              <p className="mt-3 text-muted-foreground">{s.text}</p>
             </li>
           ))}
         </ol>
+        <div className="mt-10">
+          <Button variant="hero" className="h-12 px-6 text-base" onClick={() => scrollTo("menu")}>
+            Start my order <ArrowRight />
+          </Button>
+        </div>
       </div>
-    </section>
-  );
-}
-
-/** Plain list of what we cater; choosing one remembers the event type for checkout. */
-export function Occasions() {
-  const { openWithEvent } = useCart();
-  return (
-    <section className="mx-auto max-w-7xl px-4 py-14 md:px-6">
-      <h2 className="text-3xl md:text-4xl">We cater</h2>
-      <ul className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-xl font-semibold md:text-2xl">
-        {occasions.map((o) => (
-          <li key={o.title}>
-            <button
-              onClick={() => {
-                openWithEvent(o.eventType);
-                toast(`Got it: ${o.eventType.toLowerCase()}. Now pick your trays.`);
-              }}
-              className="min-h-11 text-left underline decoration-foil decoration-2 underline-offset-[6px] hover:text-primary hover:decoration-primary"
-            >
-              {o.title}
-            </button>
-          </li>
-        ))}
-      </ul>
     </section>
   );
 }

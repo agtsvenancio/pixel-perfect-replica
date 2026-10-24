@@ -90,11 +90,11 @@ export function QtyStepper({
   min?: number;
 }) {
   return (
-    <div className="inline-flex items-center rounded-md border-2 border-foreground bg-background">
+    <div className="inline-flex items-center rounded-lg border border-input bg-background">
       <button
         type="button"
         aria-label="Decrease quantity"
-        className="h-8 w-8 text-lg font-semibold hover:text-primary disabled:opacity-30"
+        className="h-9 w-9 rounded-lg text-lg font-semibold hover:bg-secondary disabled:opacity-30"
         disabled={value <= min}
         onClick={() => onChange(value - 1)}
       >
@@ -104,7 +104,7 @@ export function QtyStepper({
       <button
         type="button"
         aria-label="Increase quantity"
-        className="h-8 w-8 text-lg font-semibold hover:text-primary"
+        className="h-9 w-9 rounded-lg text-lg font-semibold hover:bg-secondary"
         onClick={() => onChange(value + 1)}
       >
         +

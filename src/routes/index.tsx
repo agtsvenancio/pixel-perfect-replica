@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header, MobileBar } from "@/components/site/Header";
 import { LazyCartDrawer } from "@/components/site/LazyCartDrawer";
-import { Hero, HowItWorks, KitchenStrip, Occasions } from "@/components/site/Intro";
+import { Assurances, Hero, HowItWorks, Occasions } from "@/components/site/Intro";
 import { MenuSection } from "@/components/site/Menu";
 import { FAQ, faqs, FinalCta, Footer, Gallery, Reviews } from "@/components/site/Outro";
 import { site } from "@/config/site";
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: description },
       { name: "twitter:title", content: title },
       { name: "twitter:description", content: description },
-      { name: "theme-color", content: "#123b2c" },
+      { name: "theme-color", content: "#b8261b" },
     ],
     scripts: [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }],
   }),
@@ -85,12 +85,12 @@ function Index() {
       <Header />
       <main>
         <Hero />
-        <KitchenStrip />
-        <HowItWorks />
+        <Assurances />
+        <Occasions />
         <MenuSection />
+        <HowItWorks />
         <Gallery />
         <Reviews />
-        <Occasions />
         <FAQ />
         <FinalCta />
       </main>

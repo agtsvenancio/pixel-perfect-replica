@@ -16,10 +16,10 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        hero: "rounded-md bg-primary font-semibold text-primary-foreground hover:bg-[#9e0e19] active:translate-y-px disabled:bg-[#123b2c]/15 disabled:text-[#123b2c] disabled:opacity-100",
+        hero: "rounded-lg bg-primary font-semibold text-primary-foreground shadow-sm hover:bg-[#9a1f16] active:translate-y-px disabled:bg-[#1f2522]/10 disabled:text-[#1f2522]/60 disabled:opacity-100 disabled:shadow-none",
         glass:
-          "rounded-md border-2 border-white bg-transparent font-semibold text-white hover:bg-white hover:text-[#123b2c]",
-        soft: "rounded-md border-2 border-foreground bg-transparent font-semibold text-foreground hover:bg-foreground hover:text-background",
+          "rounded-lg border border-white/70 bg-white/10 font-semibold text-white backdrop-blur hover:bg-white hover:text-[#1f2522]",
+        soft: "rounded-lg border border-input bg-background font-semibold text-foreground hover:border-foreground",
       },
       size: {
         default: "h-9 px-4 py-2",
