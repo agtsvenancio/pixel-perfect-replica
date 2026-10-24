@@ -7,6 +7,7 @@ import { categories, menu, signatureDishIds, getMenuItem, type MenuItem } from "
 import { recommendTrays } from "@/lib/calculator";
 import { money, useCart } from "@/lib/cart";
 import { cn } from "@/lib/utils";
+import { CtaRow } from "./Intro";
 import { QtyStepper, Reveal, SafeImage, SectionHeading, scrollTo } from "./primitives";
 
 export function SignatureDishes() {
@@ -18,10 +19,10 @@ export function SignatureDishes() {
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <Reveal className="mb-12 max-w-2xl">
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-price">
-            Signature Dishes
+            Our bestsellers
           </p>
           <h2 className="text-4xl font-semibold leading-tight md:text-5xl">
-            The Trays Everyone Comes Back For
+            The Dishes Your Guests Will Remember
           </h2>
           <p className="mt-4 text-lg text-cream/70">
             Made from scratch in our Astoria kitchen and delivered hot, ready to serve.
@@ -52,6 +53,7 @@ export function SignatureDishes() {
             </Reveal>
           ))}
         </div>
+        <CtaRow className="mt-12" dark label="See All Dishes & Prices" />
       </div>
     </section>
   );
@@ -111,11 +113,11 @@ export function MenuSection() {
   return (
     <section id="menu" className="mx-auto max-w-7xl px-4 py-24 md:px-6">
       <SectionHeading
-        eyebrow="Our Menu"
-        title="Build Your Italian Feast"
+        eyebrow="Menu & prices"
+        title="Choose Your Trays"
         subtitle={`Pick your trays, set the quantity and add them to your order. Half trays serve ${site.portions.halfTray} guests — full trays (${site.portions.fullTray} guests) available on request.`}
       />
-      <div className="sticky top-16 z-30 -mx-4 mb-10 overflow-x-auto bg-background/95 px-4 py-3 backdrop-blur md:top-20 md:mx-0 md:px-0">
+      <div className="sticky top-16 z-30 -mx-4 mb-10 overflow-x-auto bg-background/95 px-4 py-3 backdrop-blur md:top-16 md:mx-0 md:px-0">
         <div role="tablist" aria-label="Menu categories" className="mx-auto flex w-max gap-2">
           {categories.map((c) => (
             <button

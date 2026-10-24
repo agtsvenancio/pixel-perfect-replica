@@ -1,9 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CartDrawer } from "@/components/site/CartDrawer";
 import { Header, MobileBar } from "@/components/site/Header";
-import { About, Hero, HowItWorks, Occasions, TrustBar } from "@/components/site/Intro";
+import {
+  Hero,
+  HowItWorks,
+  Occasions,
+  PainSolution,
+  Promise,
+  TrustBar,
+} from "@/components/site/Intro";
 import { GuestCalculator, MenuSection, SignatureDishes } from "@/components/site/Menu";
-import { Contact, FAQ, faqs, FinalCta, Footer, Gallery, Reviews } from "@/components/site/Outro";
+import { FAQ, faqs, FinalCta, Footer, Gallery, Reviews } from "@/components/site/Outro";
 import { site } from "@/config/site";
 import { CartProvider } from "@/lib/cart";
 
@@ -86,16 +93,16 @@ function Index() {
       <main>
         <Hero />
         <TrustBar />
-        <About />
-        <Occasions />
+        <PainSolution />
         <SignatureDishes />
         <MenuSection />
         <GuestCalculator />
+        <Occasions />
+        <HowItWorks />
         <Gallery />
         <Reviews />
-        <HowItWorks />
+        <Promise />
         <FAQ />
-        <Contact />
         <FinalCta />
       </main>
       <Footer />

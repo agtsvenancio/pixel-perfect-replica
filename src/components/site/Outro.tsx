@@ -1,4 +1,4 @@
-import { ArrowRight, Clock, Facebook, Instagram, Mail, MapPin, Phone, Star } from "lucide-react";
+import { ArrowRight, Facebook, Instagram, Phone, Star } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -11,35 +11,31 @@ import { gallery, images } from "@/data/content";
 import { reviews } from "@/data/reviews";
 import { money, useCart } from "@/lib/cart";
 import { cn } from "@/lib/utils";
-import { navLinks } from "./Header";
+import { CtaRow } from "./Intro";
 import { Reveal, SafeImage, SectionHeading, scrollTo } from "./primitives";
 
 export function Gallery() {
+  const shots = gallery.slice(0, 8);
   return (
-    <section id="gallery" className="py-24">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <SectionHeading
-          eyebrow="Gallery"
-          title="Straight From Our Kitchen"
-          subtitle="Real trays, real events, real New York appetites."
-        />
-        <div className="columns-2 gap-4 md:columns-3 lg:columns-4 [&>*]:mb-4">
-          {gallery.map((g, i) => (
-            <Reveal key={g.alt} delay={(i % 4) * 60} className="break-inside-avoid">
-              <div className="group overflow-hidden rounded-2xl">
-                <SafeImage
-                  src={g.src}
-                  alt={g.alt}
-                  className={cn(
-                    "w-full transition-transform duration-700 group-hover:scale-105",
-                    i % 3 === 0 ? "aspect-[3/4]" : i % 3 === 1 ? "aspect-square" : "aspect-[4/3]",
-                  )}
-                />
-              </div>
-            </Reveal>
-          ))}
-        </div>
+    <section className="overflow-hidden bg-secondary/60 py-20">
+      <SectionHeading
+        eyebrow="Made fresh, delivered hot"
+        title="This Is What Arrives at Your Event"
+      />
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-3 px-4 md:grid-cols-4 md:gap-4 md:px-6">
+        {shots.map((g, i) => (
+          <Reveal key={g.alt} delay={(i % 4) * 60}>
+            <div className="group overflow-hidden rounded-2xl">
+              <SafeImage
+                src={g.src}
+                alt={g.alt}
+                className="aspect-square w-full transition-transform duration-700 group-hover:scale-105"
+              />
+            </div>
+          </Reveal>
+        ))}
       </div>
+      <CtaRow className="mt-12 px-4" label="I Want This at My Event" />
     </section>
   );
 }
@@ -113,7 +109,11 @@ export const faqs = [
 export function FAQ() {
   return (
     <section id="faq" className="mx-auto max-w-3xl px-4 py-24 md:px-6">
-      <SectionHeading eyebrow="FAQ" title="Questions? We've Got Answers" />
+      <SectionHeading
+        eyebrow="FAQ"
+        title="Before You Order"
+        subtitle="The questions hosts ask us most."
+      />
       <Reveal>
         <Accordion
           type="single"
@@ -132,87 +132,13 @@ export function FAQ() {
           ))}
         </Accordion>
       </Reveal>
-    </section>
-  );
-}
-
-export function Contact() {
-  const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(site.address.mapQuery)}&output=embed`;
-  const rows = [
-    { icon: Phone, label: "Phone", value: site.phone, href: site.phoneHref },
-    { icon: Mail, label: "Email", value: site.email, href: `mailto:${site.email}` },
-    {
-      icon: MapPin,
-      label: "Kitchen",
-      value: site.address.full,
-      href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.address.mapQuery)}`,
-    },
-    { icon: Clock, label: "Hours", value: site.hoursSummary },
-  ];
-  return (
-    <section id="contact" className="bg-secondary/60 py-24">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 md:px-6 lg:grid-cols-2">
-        <Reveal>
-          <p className="eyebrow mb-3">Contact</p>
-          <h2 className="text-4xl font-semibold leading-tight md:text-5xl">
-            Let's Plan Your Event
-          </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Call, email or start your order online — we'll take it from there.
-          </p>
-          <ul className="mt-8 space-y-5">
-            {rows.map(({ icon: Icon, label, value, href }) => (
-              <li key={label} className="flex items-start gap-4">
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <Icon className="size-5" />
-                </span>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    {label}
-                  </p>
-                  {href ? (
-                    <a
-                      href={href}
-                      target={href.startsWith("http") ? "_blank" : undefined}
-                      rel="noreferrer"
-                      className="text-lg font-semibold hover:text-primary"
-                    >
-                      {value}
-                    </a>
-                  ) : (
-                    <p className="text-lg font-semibold">{value}</p>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button variant="hero" size="xl" asChild>
-              <a href={site.phoneHref}>
-                <Phone /> Call {site.phone}
-              </a>
-            </Button>
-          </div>
-        </Reveal>
-        <Reveal
-          delay={120}
-          className="min-h-[360px] overflow-hidden rounded-3xl border border-border shadow-soft"
-        >
-          <iframe
-            title={`Map to ${site.name}`}
-            src={mapSrc}
-            loading="lazy"
-            className="h-full min-h-[360px] w-full border-0"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </Reveal>
-      </div>
+      <CtaRow className="mt-12" label="Start My Order" />
     </section>
   );
 }
 
 export function FinalCta() {
-  const { setOpen } = useCart();
+  const { setOpen, count, subtotal } = useCart();
   return (
     <section className="relative overflow-hidden">
       <SafeImage
@@ -221,21 +147,40 @@ export function FinalCta() {
         className="absolute inset-0 h-full w-full"
       />
       <div className="overlay-hero absolute inset-0" />
-      <div className="relative mx-auto max-w-4xl px-4 py-28 text-center text-cream md:px-6">
+      <div className="relative mx-auto max-w-4xl px-4 py-24 text-center text-cream md:px-6 md:py-28">
+        <p className="mx-auto mb-5 inline-flex items-center gap-2 rounded-full bg-cream/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] backdrop-blur">
+          <span className="size-2 animate-pulse rounded-full bg-price" /> Holiday season is booking
+          now
+        </p>
         <h2 className="text-4xl font-semibold leading-tight md:text-6xl">
-          Your guests deserve a real Italian feast.
+          Don't Let Your Date Get Taken.
         </h2>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-cream/85">
-          Holiday dates fill up fast. Reserve your order today — no payment needed until we confirm.
+          Pick your trays, send your order in 2 minutes and we'll call you within{" "}
+          {site.responseHours} hours to confirm. No payment until then.
         </p>
         <div className="mt-9 flex flex-wrap justify-center gap-3">
-          <Button variant="hero" size="xl" onClick={() => scrollTo("menu")}>
-            Build Your Order <ArrowRight />
-          </Button>
-          <Button variant="glass" size="xl" onClick={() => setOpen(true)}>
-            Review My Order
+          {count > 0 ? (
+            <Button variant="hero" size="xl" onClick={() => setOpen(true)}>
+              Finish My Order · {money(subtotal)} <ArrowRight />
+            </Button>
+          ) : (
+            <Button variant="hero" size="xl" onClick={() => scrollTo("menu")}>
+              Start My Order <ArrowRight />
+            </Button>
+          )}
+          <Button variant="glass" size="xl" asChild>
+            <a href={site.phoneHref}>
+              <Phone /> Call {site.phone}
+            </a>
           </Button>
         </div>
+        <p className="mt-6 text-sm text-cream/70">
+          Prefer email?{" "}
+          <a href={`mailto:${site.email}`} className="underline underline-offset-4">
+            {site.email}
+          </a>
+        </p>
       </div>
     </section>
   );
@@ -243,70 +188,42 @@ export function FinalCta() {
 
 export function Footer() {
   return (
-    <footer className="bg-charcoal pb-28 pt-16 text-cream/80 md:pb-12">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 md:grid-cols-4 md:px-6">
-        <div className="md:col-span-2">
-          <p className="font-serif text-2xl font-semibold text-cream">
+    <footer className="bg-charcoal pb-28 pt-10 text-sm text-cream/70 md:pb-10">
+      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 md:flex-row md:items-center md:justify-between md:px-6">
+        <div>
+          <p className="font-serif text-xl font-semibold text-cream">
             Italian Bites <span className="italic text-price">Catering</span>
           </p>
-          <p className="mt-3 max-w-sm text-sm">
-            {site.tagline} Homemade trays delivered across New York City from our kitchen in
-            Astoria, Queens.
+          <p className="mt-2">
+            {site.address.full} ·{" "}
+            <a href={site.phoneHref} className="hover:text-price">
+              {site.phone}
+            </a>{" "}
+            · {site.hoursSummary}
           </p>
-          <div className="mt-5 flex gap-3">
-            <a
-              href={site.social.instagram}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Instagram"
-              className="flex size-10 items-center justify-center rounded-full border border-cream/20 hover:border-price hover:text-price"
-            >
-              <Instagram className="size-4" />
-            </a>
-            <a
-              href={site.social.facebook}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Facebook"
-              className="flex size-10 items-center justify-center rounded-full border border-cream/20 hover:border-price hover:text-price"
-            >
-              <Facebook className="size-4" />
-            </a>
-          </div>
         </div>
-        <div>
-          <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-cream">Explore</p>
-          <ul className="space-y-2 text-sm">
-            {navLinks.map((l) => (
-              <li key={l.id}>
-                <a href={`#${l.id}`} className="hover:text-price">
-                  {l.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-cream">
-            Visit & Order
-          </p>
-          <ul className="space-y-2 text-sm">
-            <li>{site.address.full}</li>
-            <li>
-              <a href={site.phoneHref} className="hover:text-price">
-                {site.phone}
-              </a>
-            </li>
-            <li>
-              <a href={`mailto:${site.email}`} className="hover:text-price">
-                {site.email}
-              </a>
-            </li>
-            <li>{site.hoursSummary}</li>
-          </ul>
+        <div className="flex gap-3">
+          <a
+            href={site.social.instagram}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Instagram"
+            className="flex size-10 items-center justify-center rounded-full border border-cream/20 hover:border-price hover:text-price"
+          >
+            <Instagram className="size-4" />
+          </a>
+          <a
+            href={site.social.facebook}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Facebook"
+            className="flex size-10 items-center justify-center rounded-full border border-cream/20 hover:border-price hover:text-price"
+          >
+            <Facebook className="size-4" />
+          </a>
         </div>
       </div>
-      <div className="mx-auto mt-12 max-w-7xl border-t border-cream/10 px-4 pt-6 text-xs text-cream/50 md:px-6">
+      <div className="mx-auto mt-8 max-w-7xl border-t border-cream/10 px-4 pt-5 text-xs text-cream/40 md:px-6">
         © {new Date().getFullYear()} {site.name}. All rights reserved.
       </div>
     </footer>
