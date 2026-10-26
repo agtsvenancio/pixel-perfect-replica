@@ -110,20 +110,20 @@ export const adminSession = createServerFn({ method: "GET" }).handler(async () =
 const failedLogins = new Map<string, { n: number; until: number }>();
 
 export const adminLogin = createServerFn({ method: "POST" })
-  .validator((d: { password: string }) => z.object({ password: z.string().max(200) }).parse(d))
+  .validator((d: { email: string; password: string }) =>
+    z.object({ email: z.string().max(200), password: z.string().max(200) }).parse(d),
+  )
   .handler(async ({ data }) => {
     const auth = await import("./auth.server");
     const key = "global";
     const f = failedLogins.get(key);
     if (f && f.until > Date.now())
       return { ok: false as const, error: "Too many attempts. Wait a minute and try again." };
-    if (!auth.adminConfigured())
-      return { ok: false as const, error: "ADMIN_PASSWORD is not set on the server." };
-    if (!auth.checkPassword(data.password)) {
+    if (!auth.checkCredentials(data.email, data.password)) {
       const n = (f?.n ?? 0) + 1;
       failedLogins.set(key, { n, until: n >= 5 ? Date.now() + 60_000 : 0 });
       await new Promise((r) => setTimeout(r, 600));
-      return { ok: false as const, error: "Wrong password." };
+      return { ok: false as const, error: "Wrong email or password." };
     }
     failedLogins.delete(key);
     auth.startSession();
@@ -146,15 +146,14 @@ export const adminListOrders = createServerFn({ method: "GET" }).handler(
 );
 
 export const adminUpdateOrder = createServerFn({ method: "POST" })
-  .validator(
-    (d: { id: number; status?: (typeof ORDER_STATUSES)[number]; adminNotes?: string }) =>
-      z
-        .object({
-          id: z.number().int(),
-          status: z.enum(ORDER_STATUSES).optional(),
-          adminNotes: z.string().max(5000).optional(),
-        })
-        .parse(d),
+  .validator((d: { id: number; status?: (typeof ORDER_STATUSES)[number]; adminNotes?: string }) =>
+    z
+      .object({
+        id: z.number().int(),
+        status: z.enum(ORDER_STATUSES).optional(),
+        adminNotes: z.string().max(5000).optional(),
+      })
+      .parse(d),
   )
   .handler(async ({ data }) => {
     const auth = await import("./auth.server");

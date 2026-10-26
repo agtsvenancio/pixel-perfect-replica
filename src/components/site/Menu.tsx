@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { Calculator, Plus, Users } from "lucide-react";
+import { Plus, Users } from "lucide-react";
 import { toast } from "sonner";
 import { site } from "@/config/site";
 import { categories, menu, type MenuItem } from "@/data/menu";
-import { recommendTrays } from "@/lib/calculator";
 import { money, useCart } from "@/lib/cart";
 import { cn } from "@/lib/utils";
 import { OrderSlip } from "./OrderSummary";
@@ -124,45 +123,6 @@ function CategoryTabs() {
   );
 }
 
-function GuestCalculator() {
-  const [guests, setGuests] = useState(25);
-  const rec = useMemo(() => recommendTrays(guests), [guests]);
-  return (
-    <div id="calculator" className="rounded-2xl border border-border bg-secondary/60 p-5 md:p-6">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
-        <span className="flex size-10 items-center justify-center rounded-xl bg-background text-primary">
-          <Calculator className="size-5" />
-        </span>
-        <label htmlFor="guests" className="text-lg font-bold">
-          How much food do I need?
-        </label>
-        <div className="flex items-center gap-2">
-          <input
-            id="guests"
-            type="number"
-            min={1}
-            max={1000}
-            inputMode="numeric"
-            value={guests}
-            onChange={(e) => setGuests(Math.max(1, Math.min(1000, Number(e.target.value) || 1)))}
-            className="h-11 w-24 rounded-lg border border-input bg-background text-center text-lg font-bold tabular"
-          />
-          <span className="font-medium">guests</span>
-        </div>
-      </div>
-      <p className="mt-3 text-sm text-muted-foreground">Recommended number of half trays:</p>
-      <div className="mt-2 grid grid-cols-5 gap-2">
-        {categories.map((c) => (
-          <div key={c.id} className="rounded-xl bg-background px-2 py-3 text-center">
-            <p className="tabular text-2xl font-bold">{rec[c.id]}</p>
-            <p className="mt-0.5 text-xs leading-tight text-muted-foreground">{c.label}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export function MenuSection() {
   const grouped = useMemo(
     () =>
@@ -188,7 +148,6 @@ export function MenuSection() {
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="min-w-0">
-          <GuestCalculator />
           <CategoryTabs />
           {grouped.map((g) => (
             <div key={g.id} id={`cat-${g.id}`} className="scroll-mt-36 pt-8">

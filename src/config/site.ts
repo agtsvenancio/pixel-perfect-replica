@@ -2,8 +2,8 @@
 export const site = {
   name: "Italian Bites Catering",
   tagline: "Authentic Italian catering for New York's best celebrations.",
-  phone: "(929) 615-0944",
-  phoneHref: "tel:+19296150944",
+  phone: "(917) 325-8744",
+  phoneHref: "tel:+19173258744",
   email: "orders@italianbitescatering.com", // PLACEHOLDER — replace with the real email
   address: {
     street: "31-88 30th Street",

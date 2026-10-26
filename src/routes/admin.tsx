@@ -119,6 +119,7 @@ function AdminPage() {
 }
 
 function Login({ configured, onDone }: { configured: boolean; onDone: () => void }) {
+  const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
@@ -127,7 +128,7 @@ function Login({ configured, onDone }: { configured: boolean; onDone: () => void
     setBusy(true);
     setErr("");
     try {
-      const r = await adminLogin({ data: { password: pw } });
+      const r = await adminLogin({ data: { email, password: pw } });
       if (r.ok) onDone();
       else setErr(r.error);
     } catch {
@@ -151,20 +152,36 @@ function Login({ configured, onDone }: { configured: boolean; onDone: () => void
             server first.
           </p>
         )}
-        <label htmlFor="pw" className="mt-6 block text-sm font-semibold">
+        <label htmlFor="email" className="mt-6 block text-sm font-semibold">
+          Email
+        </label>
+        <Input
+          id="email"
+          type="email"
+          autoFocus
+          autoComplete="username"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="mt-2 h-11"
+        />
+        <label htmlFor="pw" className="mt-4 block text-sm font-semibold">
           Password
         </label>
         <Input
           id="pw"
           type="password"
-          autoFocus
           autoComplete="current-password"
           value={pw}
           onChange={(e) => setPw(e.target.value)}
           className="mt-2 h-11"
         />
         {err && <p className="mt-2 text-sm font-medium text-destructive">{err}</p>}
-        <Button type="submit" variant="hero" className="mt-6 h-11 w-full" disabled={busy || !pw}>
+        <Button
+          type="submit"
+          variant="hero"
+          className="mt-6 h-11 w-full"
+          disabled={busy || !pw || !email}
+        >
           {busy ? <Loader2 className="animate-spin" /> : "Sign in"}
         </Button>
       </form>

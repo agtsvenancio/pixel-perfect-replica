@@ -81,7 +81,7 @@ export function Assurances() {
     {
       icon: Users,
       title: "The right amount of food",
-      text: `Half trays feed ${site.portions.halfTray}. Our calculator does the math.`,
+      text: `Each half tray feeds ${site.portions.halfTray} people.`,
     },
     {
       icon: CalendarClock,
@@ -158,7 +158,7 @@ export function HowItWorks() {
     {
       icon: Users,
       title: "Choose your trays",
-      text: "Prices and portions are on every dish. Not sure how much? Use the guest calculator.",
+      text: "Prices and portions are on every dish. Not sure how much? Call us and we will help.",
     },
     {
       icon: Truck,

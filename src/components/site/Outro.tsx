@@ -74,7 +74,7 @@ export const faqs = [
   },
   {
     q: "Will there be enough food?",
-    a: `A half tray serves about ${site.portions.halfTray} people and a full tray about ${site.portions.fullTray}. Type your guest count into the calculator above the menu and it tells you how many trays to get per course. We double-check your order when we call.`,
+    a: `A half tray serves about ${site.portions.halfTray} people and a full tray about ${site.portions.fullTray}. Each dish shows how many people it serves, and we double-check your order when we call.`,
   },
   {
     q: "How far in advance should I order?",
