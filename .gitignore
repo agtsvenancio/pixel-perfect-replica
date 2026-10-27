@@ -34,3 +34,7 @@ dist-ssr
 # Local order storage (dev fallback)
 data/
 .env
+
+# Static public_html build
+dist-static/
+italian-bites-public_html.zip

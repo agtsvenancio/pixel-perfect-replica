@@ -27,7 +27,7 @@ import { site } from "@/config/site";
 import { eventTypes } from "@/data/content";
 import { lineInfo, money, useCart } from "@/lib/cart";
 import { cn } from "@/lib/utils";
-import { createOrder } from "@/orders/functions";
+import { createOrder } from "@/orders/client";
 import { MinimumProgress } from "./OrderSummary";
 import { QtyStepper, SafeImage, scrollTo } from "./primitives";
 

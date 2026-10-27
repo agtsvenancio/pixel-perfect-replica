@@ -38,7 +38,7 @@ import {
   adminLogout,
   adminSession,
   adminUpdateOrder,
-} from "@/orders/functions";
+} from "@/orders/client";
 import { ORDER_STATUSES, STATUS_LABEL, type OrderRecord, type OrderStatus } from "@/orders/types";
 
 export const Route = createFileRoute("/admin")({
@@ -321,11 +321,18 @@ function Dashboard({ storage, onLogout }: { storage: "mysql" | "file"; onLogout:
         {storage === "file" && (
           <p className="mb-5 flex gap-2 rounded-2xl border border-price/30 bg-price/10 p-4 text-sm">
             <AlertTriangle className="mt-0.5 size-4 shrink-0 text-price" />
-            <span>
-              Orders are being saved to a local file (no database configured). Connect MySQL with
-              the <code className="font-mono">DB_HOST / DB_USER / DB_PASSWORD / DB_NAME</code>{" "}
-              variables so orders aren't lost on redeploy.
-            </span>
+            {import.meta.env["VITE_STATIC_API"] === "1" ? (
+              <span>
+                No database connected yet, so new orders can't be saved. Fill in the MySQL details
+                in <code className="font-mono">api/config.php</code>.
+              </span>
+            ) : (
+              <span>
+                Orders are being saved to a local file (no database configured). Connect MySQL with
+                the <code className="font-mono">DB_HOST / DB_USER / DB_PASSWORD / DB_NAME</code>{" "}
+                variables so orders aren't lost on redeploy.
+              </span>
+            )}
           </p>
         )}
 
