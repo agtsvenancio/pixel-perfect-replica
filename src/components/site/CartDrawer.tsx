@@ -187,7 +187,10 @@ export function CartDrawer() {
       }));
     } catch (err) {
       console.error(err);
-      toast.error(`We couldn't send your order. Please try again or call ${site.phone}.`);
+      const msg = err instanceof Error ? err.message : "";
+      // Validation messages from the server are written for customers — show them as-is.
+      if (/^(Please|Minimum)/.test(msg)) toast.error(msg);
+      else toast.error(`We couldn't send your order. Please try again or call ${site.phone}.`);
     } finally {
       setSubmitting(false);
     }
