@@ -30,7 +30,7 @@ export const site = {
   eventsCatered: 2500,
   guestRange: "10 to 500+",
 
-  minimumOrder: 150, // USD, PLACEHOLDER
+  minimumOrder: 50, // USD
   leadTimeDays: 2, // minimum days in advance, PLACEHOLDER
   responseHours: 24, // we contact customers within X hours, PLACEHOLDER
 
