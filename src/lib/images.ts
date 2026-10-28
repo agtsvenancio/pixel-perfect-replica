@@ -8,9 +8,12 @@ const all = import.meta.glob("../assets/*.webp", {
   import: "default",
 }) as Record<string, string>;
 
+// Width of the largest file for photos that aren't the default 1024px.
+const LARGE_WIDTH: Record<string, number> = { hero: 1600, "real-spread": 1200 };
+
 const byLarge = new Map<
   string,
-  { sm: string | undefined; xs: string | undefined; md: string | undefined }
+  { sm: string | undefined; xs: string | undefined; md: string | undefined; w: number }
 >();
 for (const [path, url] of Object.entries(all)) {
   const m = path.match(/\/([a-z0-9-]+?)(-sm|-xs|-md)?\.webp$/);
@@ -20,6 +23,7 @@ for (const [path, url] of Object.entries(all)) {
     sm: all[`${base}-sm.webp`],
     xs: all[`${base}-xs.webp`],
     md: all[`${base}-md.webp`],
+    w: LARGE_WIDTH[m[1]!] ?? 1024,
   });
 }
 
@@ -27,13 +31,7 @@ export function srcSetFor(src: string | undefined): string | undefined {
   if (!src) return undefined;
   const v = byLarge.get(src);
   if (!v) return undefined;
-  // Photos with a -md variant are 1600px wide; the rest are 1024px originals.
-  return [
-    v.xs && `${v.xs} 240w`,
-    v.sm && `${v.sm} 640w`,
-    v.md && `${v.md} 960w`,
-    `${src} ${v.md ? 1600 : 1024}w`,
-  ]
+  return [v.xs && `${v.xs} 240w`, v.sm && `${v.sm} 640w`, v.md && `${v.md} 960w`, `${src} ${v.w}w`]
     .filter(Boolean)
     .join(", ");
 }

@@ -12,8 +12,12 @@ import steak from "@/assets/steak.webp";
 import kitchen from "@/assets/kitchen.webp";
 import spaghetti from "@/assets/spaghetti.webp";
 import chocolate from "@/assets/chocolate.webp";
+import realSpread from "@/assets/real-spread.webp";
+import realBuffet from "@/assets/real-buffet.webp";
+import realMeals from "@/assets/real-meals.webp";
 
-export const images = { hero, kitchen, finalCta: holiday };
+// Real photos from Italian Bites events: realSpread (hero), realBuffet and realMeals (gallery).
+export const images = { hero: realSpread, kitchen, finalCta: holiday };
 
 export const eventTypes = [
   "Holiday Party",
@@ -36,6 +40,8 @@ export const occasions = [
 
 export const gallery = [
   { src: hero, alt: "Italian catering buffet with trays of lasagna, penne and antipasto" },
+  { src: realBuffet, alt: "Server presenting a board of sandwiches at a catered buffet" },
+  { src: realMeals, alt: "Individual catering meal boxes being packed for delivery" },
   { src: lasagna, alt: "Slice of lasagna bolognese with stretching melted mozzarella" },
   { src: holiday, alt: "Festive holiday table with Italian dishes and candles" },
   { src: cannoli, alt: "Fresh cannoli filled with ricotta and chocolate chips" },

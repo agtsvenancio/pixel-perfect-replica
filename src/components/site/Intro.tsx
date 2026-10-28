@@ -29,7 +29,7 @@ export function Hero() {
     <section id="top" className="relative isolate overflow-hidden bg-foreground">
       <SafeImage
         src={images.hero}
-        alt="Trays of penne, lasagna and antipasto on a catering buffet"
+        alt="Italian Bites catering spread with empanadas, charcuterie, cheese, olives, fruit and shrimp skewers"
         eager
         sizes="100vw"
         className="absolute inset-0 -z-10 h-full w-full"
